@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nextjs-deployment
+  namespace: frontend
+  labels:
+    app: nextjs-ui
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nextjs-ui
+  template:
+    metadata:
+      labels:
+        app: nextjs-ui
+    spec:
+      containers:
+      - name: nextjs-ui-cont
+        image: muyleangin/surveybox-ui:latest
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-svc
+  namespace: frontend
+spec:
+  type: LoadBalancer
+  selector:
+    app: nextjs-ui  
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+    nodePort: 30002
