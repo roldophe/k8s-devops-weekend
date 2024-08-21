@@ -1,23 +1,24 @@
 # Create a ReplicaSet for the Nginx container
 apiVersion: apps/v1
-kind: ReplicaSet # Specifies that this resource is a ReplicaSet, which ensures a specified number of pod replicas are running at any given time
+kind: ReplicaSet # Kind of the resource(ReplicaSet is a resource in k8s cluster which runs multiple replicas of a pod)
 metadata:
-  name: nginx # Name of the ReplicaSet
+  name: nginx-rs # Name of the ReplicaSet
   labels:
-    app: nginx-ui # Label to be used
+    app: nginx-ui 
+  namespace: front-end 
 spec:
-  replicas: 3 # Number of pod replicas to maintain
+  replicas: 3 # Number of replicas to be maintained
   selector:
     matchLabels:
-      app: nginx-ui # Label to be used
-  template:
+      app: nginx-ui
+  template: # Template for creating the pod
     metadata:
       labels:
-        app: nginx-ui # Label to be used
+        app: nginx-ui
     spec:
       containers:
-      - name: nginx-ui-cont # Name of the container
-        image: nginx:latest
+      - name: nginx-ui-cont 
+        image: nginx:latest # Image to be used
         ports:
         - containerPort: 80 # Port on which the container is listening
 
@@ -26,13 +27,14 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-ui
+  name: nginx-ui-svc # Name of the service
+  namespace: front-end
 spec:
-  type: NodePort
+  type: NodePort # Exposes the service on each Node's IP at a static port
   selector:
-    app: nginx-ui  # Label to be used (corrected to match the pod label)
+    app: nginx-ui
   ports:
-  - protocol: TCP # The protocol that the service is using
-    port: 80
-    targetPort: 80
-    nodePort: 30003 # The port on the node that is exposed to the service
+  - protocol: TCP 
+    port: 80 # External port(Can be accessed from outside the cluster)
+    targetPort: 80 # Container's internal port(Can be accessed from inside the cluster)
+    nodePort: 30003 # Port on which the service is exposed on the Node
