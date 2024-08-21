@@ -1,21 +1,43 @@
 # Deployment: nginx-deployment
 # # A Deployment provides declarative updates to Pods and ReplicaSets.
 apiVersion: apps/v1
-kind: Deployment # Kind of resource
+kind: Deployment # Kind of resource that we are going to create in Kubernetes cluster 
 metadata:
   name: nginx-deployment # Name of the Deployment
 spec:
   replicas: 3 # Number of Pods to run
   selector:
     matchLabels:
-      app: nginx-ui  # Label to match with the Pod
+      app: my-nginx-app  # Label to match with the Pod
   template:
     metadata:
       labels:
-        app: nginx-ui  # Label to match with the Pod
+        app: my-nginx-app  # Label to match with the Pod
     spec:
       containers:
-      - name: nginx-cont
+      - name: nginx-ui-cont
         image: nginx:1.22.1
         ports:
         - containerPort: 80
+
+---
+# Create a Service to expose the Deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: my-nginx-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: NodePort
+
+# Note: 
+# 1. The Deployment creates 3 replicas of the nginx:1.22.1 image.
+# 2. The Service exposes the Deployment on port 80.
+# 3. The Service is of type NodePort, which makes the Service accessible from outside the cluster.
+# 4. The Service selects the Pods with the label app: my-nginx-app.
+# 5. The Deployment uses the default namespace.
