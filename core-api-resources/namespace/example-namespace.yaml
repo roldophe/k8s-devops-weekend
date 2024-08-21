@@ -1,0 +1,25 @@
+---
+# Namespace: Provides a scope for names to avoid conflicts.
+
+apiVersion: v1 # API version
+kind: Namespace # Kind of the resource
+metadata: # Metadata of the resource
+  name: front-end # Name of the namespace (front-end)
+
+---
+apiVersion: v1 
+kind: Namespace
+metadata:
+  name: back-end  
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: dev  
+
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prod  

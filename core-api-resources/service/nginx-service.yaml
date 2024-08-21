@@ -1,22 +1,11 @@
-apiVersion: v1
-kind: Pod # Kind of the resource(Pod is a resource in k8s cluster which runs a container)
-metadata:
-  name: nginx-pod   # Name of the pod
-  labels:
-    app: nginx-lbl  # Label to be used
-  namespace: nginx  # Namespace for the pod
-spec:
-  containers: 
-    - name: nginx-cont        # Name of the container
-      image: nginx:1.22.1     # Image to be used 
-      ports:
-        - containerPort: 80   # Port on which the container is listening
+
 ---
+# Service: Exposes a set of Pods as a network service.
 apiVersion: v1
 kind: Service       # Kind of the resource (Service is a resource in k8s cluster which exposes the pod)
 metadata:
   name: nginx-svc   # Name of the service
-  namespace: nginx  # Namespace for the service
+  namespace: front-end  # Namespace for the service
 spec:
   type: NodePort    # Type of the service
   selector:

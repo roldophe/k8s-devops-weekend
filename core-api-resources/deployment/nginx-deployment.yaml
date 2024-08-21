@@ -1,0 +1,21 @@
+# Deployment: nginx-deployment
+# # A Deployment provides declarative updates to Pods and ReplicaSets.
+apiVersion: apps/v1
+kind: Deployment # Kind of resource
+metadata:
+  name: nginx-deployment # Name of the Deployment
+spec:
+  replicas: 3 # Number of Pods to run
+  selector:
+    matchLabels:
+      app: nginx-ui  # Label to match with the Pod
+  template:
+    metadata:
+      labels:
+        app: nginx-ui  # Label to match with the Pod
+    spec:
+      containers:
+      - name: nginx-cont
+        image: nginx:1.22.1
+        ports:
+        - containerPort: 80

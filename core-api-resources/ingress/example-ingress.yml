@@ -1,8 +1,9 @@
+# Ingress is a collection of rules that allow inbound connections to reach the cluster services.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: example-ingress
-  namespace: frontend
+  namespace: front-end
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:

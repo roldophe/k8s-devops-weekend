@@ -1,0 +1,11 @@
+
+---
+# ConfigMap: Stores configuration data in key-value pairs.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-config
+  namespace: default
+data:
+  example.property.1: "value1"
+  example.property.2: "value2"
