@@ -34,10 +34,3 @@ spec:
       port: 81 # Port exposed by the Service
       targetPort: 80 # Port on the container (matches containerPort)
   type: NodePort
-
-# Note: 
-# 1. The Deployment creates 3 replicas of the nginx:1.22.1 image.
-# 2. The Service exposes the Deployment on port 80.
-# 3. The Service is of type NodePort, which makes the Service accessible from outside the cluster.
-# 4. The Service selects the Pods with the label app: my-nginx-app.
-# 5. The Deployment uses the default namespace.
