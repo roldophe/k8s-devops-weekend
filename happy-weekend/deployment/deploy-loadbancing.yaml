@@ -26,10 +26,11 @@ spec:
             memory: "512Mi" # 512 Mebibytes
 
 ---
+# Create a LoadBalancer Service to expose the Deployment
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-svc
+  name: nextjs-svc # Name of the Service
   namespace: front-end
 spec:
   type: LoadBalancer
