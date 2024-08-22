@@ -1,7 +1,8 @@
 # Deployment: nginx-deployment
-# # A Deployment provides declarative updates to Pods and ReplicaSets.
+# A Deployment provides declarative updates to Pods and ReplicaSets.
+---
 apiVersion: apps/v1
-kind: Deployment # Kind of resource that we are going to create in Kubernetes cluster 
+kind: Deployment  
 metadata:
   name: nginx-deployment # Name of the Deployment
 spec:
