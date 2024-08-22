@@ -21,15 +21,17 @@ spec:
         - name: my-nginx-cont
           image: nginx:1.22.1
           resources:
-            requests:
-              cpu: 100m
-              memory: "256Mi"
+            requests: # minimum resources required by the container
+              cpu: 100m # 0.1 core
+              memory: "256Mi" # 256 Mebibytes
             limits:
-              cpu: 200m
-              memory: "512Mi" 
+              cpu: 200m # 0.2 core
+              memory: "512Mi"  # 512 Mebibytes
           ports:
             - containerPort: 80     
+
 ---
+# 
 apiVersion: v1
 kind: Service
 metadata:
@@ -42,7 +44,8 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
-      nodePort: 30005              
+      nodePort: 30005          
+
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler

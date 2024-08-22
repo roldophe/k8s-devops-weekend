@@ -8,7 +8,7 @@ spec:
   replicas: 3 # Number of Pods to run
   selector:
     matchLabels:
-      app: my-nginx-app  # Label to match with the Pod
+      app: my-nginx-app # Label to match with the Pod
   template:
     metadata:
       labels:
@@ -19,6 +19,10 @@ spec:
         image: nginx:1.22.1
         ports:
         - containerPort: 80
+        resources:
+          limits:
+            cpu: "0.5"  # Maximum amount of CPU that the container can use
+            memory: "512Mi" # Maximum amount of memory that the container can use
 
 ---
 # Create a Service to expose the Deployment

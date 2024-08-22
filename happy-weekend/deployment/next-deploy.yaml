@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nextjs-deployment
-  namespace: frontend
+  namespace: front-end
   labels:
     app: nextjs-ui
 spec:
@@ -20,12 +20,17 @@ spec:
         image: muyleangin/surveybox-ui:latest
         ports:
         - containerPort: 3000
+        resources: # minimum resources required by the container
+          limits:
+            cpu: "500m" # 0.5 core
+            memory: "512Mi" # 512 Mebibytes
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: frontend-svc
-  namespace: frontend
+  namespace: front-end
 spec:
   type: LoadBalancer
   selector:

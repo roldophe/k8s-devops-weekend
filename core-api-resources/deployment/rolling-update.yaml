@@ -1,17 +1,17 @@
+--- 
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
 spec:
-  replicas: 4
   strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 1
+    type: RollingUpdate 
+    rollingUpdate: 
+      maxSurge: 1 # Maximum number of Pods that can be created above the desired number of Pods
+      maxUnavailable: 1 # Maximum number of Pods that can be unavailable during the update
   selector:
     matchLabels:
-      app: nginx-ui
+      app: nginx-ui 
   template:
     metadata:
       labels:
@@ -22,6 +22,10 @@ spec:
         image: nginx:latest
         ports:
         - containerPort: 80
+        resources:
+          limits:
+            cpu: "0.5" # Maximum amount of CPU that the container can use
+            memory: "512Mi" # Maximum amount of memory that the container can use
 ---
 apiVersion: v1
 kind: Service
