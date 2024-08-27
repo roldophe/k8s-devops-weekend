@@ -1,0 +1,93 @@
+---
+# Deployment: nginx-deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-lbl
+  template:
+    metadata:
+      labels:
+        app: nginx-lbl
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.22.1
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+
+# ---
+# # Service: ClusterIP
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx-clusterip-svc
+#   namespace: nginx
+# spec:
+#   type: ClusterIP # Default value If not specified(Can access only within the cluster)
+#   selector:
+#     app: nginx-lbl
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 80
+
+# ---
+# # Service: NodePort
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx-nodeport-svc
+#   namespace: nginx
+# spec:
+#   type: NodePort # Exposes the service on each Node's IP at a static port (the NodePort)s
+#   selector:
+#     app: nginx-lbl
+#   ports:
+#     - protocol: TCP
+#       port: 80
+#       targetPort: 80
+#       nodePort: 30081   # Optional field
+#                         # By default and for convenience, the Kubernetes control plane
+#                         # will allocate a port from a range (default: 30000-32767)
+                        
+
+---
+# Service: LoadBalancer
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-loadbalancer-svc 
+  namespace: nginx
+spec:
+  type: LoadBalancer # Exposes the service externally using a cloud provider's load balancer
+  selector:
+    app: nginx-lbl
+  ports:
+    - protocol: TCP
+      port: 80 
+      targetPort: 80  
+      # By default and for convenience, the `targetPort` is set to the same value as the `port` field.
+
+# ---
+## Service: ExternalName
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: nginx-externalname-svc
+#   namespace: nginx
+# spec:
+#   type: ExternalName
+#   externalName: example.com

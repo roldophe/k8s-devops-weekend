@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jobfinder-deployment
+  namespace: front-end
+  labels:
+    app: jobfinder-ui
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: jobfinder-ui
+  template:
+    metadata:
+      labels:
+        app: jobfinder-ui
+    spec:
+      containers:
+      - name: jobfinder-ui-cont
+        image: radomkhoem/jobfinder:latest
+        ports:
+        - containerPort: 80
+        resources: # minimum resources required by the container
+          limits:
+            cpu: "500m" # 0.5 core
+            memory: "512Mi" # 512 Mebibytes
+
+---
+# Create a LoadBalancer Service to expose the Deployment
+apiVersion: v1
+kind: Service
+metadata:
+  name: jobfinder-svc # Name of the Service
+  namespace: front-end
+spec:
+  type: LoadBalancer  
+  selector:
+    app: jobfinder-ui
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30168

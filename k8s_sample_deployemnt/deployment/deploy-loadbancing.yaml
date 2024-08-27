@@ -33,9 +33,9 @@ metadata:
   name: nextjs-svc # Name of the Service
   namespace: front-end
 spec:
-  type: LoadBalancer
+  type: LoadBalancer  
   selector:
-    app: nextjs-ui  
+    app: nextjs-ui
   ports:
   - protocol: TCP
     port: 3000

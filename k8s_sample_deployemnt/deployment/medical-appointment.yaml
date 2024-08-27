@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: medical-app
+  namespace: medical-appointment
+  labels:
+    app: medical-app
+    environment: production
+  annotations:
+    description: "Deployment for Medical API"
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: medical-app
+  template:
+    metadata:
+      labels:
+        app: medical-app
+    spec:
+      containers:
+        - name: medical
+          image: radomkhoem/medical_appointment_app:v1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: token-keys
+              mountPath: /app/keys
+            - name: file-server-path
+              mountPath: /opt/app/media/images/
+          envFrom:
+            - configMapRef:
+                name: medical-app-config
+            - secretRef:
+                name: medical-app-secret
+          resources:
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+      volumes:
+        - name: token-keys
+          hostPath:
+            path: /home/radomkhoem/keys
+        - name: file-server-path
+          hostPath:
+            path: /opt/app/media/images/
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: medical-service
+  namespace: medical-appointment
+  labels:
+    app: medical-app
+spec:
+  type: NodePort
+  selector:
+    app: medical-app
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30012
