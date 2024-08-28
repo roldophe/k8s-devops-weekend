@@ -1,3 +1,28 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: medical-app-secret
+  namespace: medical-appointment
+type: Opaque
+data:
+  POSTGRES_DB: bWVkaWNhbF9hcHB0X2Ri  # base64 encoded value of 'medical_appt_db'
+  POSTGRES_USER: cG9zdGdyZXM=        # base64 encoded value of 'postgres'
+  POSTGRES_PASSWORD: YWRtaW5AMTIz     # base64 encoded value of 'admin@123'
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: medical-app-config
+  namespace: medical-appointment
+data:
+  APP_BASE_URI: "http://35.240.198.147:30012/"
+  DB_HOST: "35.240.142.204"
+  DB_PORT: "8096"
+  FILE_BASE_URI: "http://35.240.198.147:30012/file/"
+  FILE_DOWNLOAD_URI: "http://35.240.198.147:30012/api/v1/files/download/"
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -34,6 +59,22 @@ spec:
                 name: medical-app-config
             - secretRef:
                 name: medical-app-secret
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: medical-app-secret
+                  key: POSTGRES_USER
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: medical-app-secret
+                  key: POSTGRES_PASSWORD
+            - name: DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: medical-app-secret
+                  key: POSTGRES_DB
           resources:
             limits:
               cpu: "500m"
