@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - k8s.radom-kh.site
+        - surveybox.radom-kh.site
       secretName: surveybox-tls
   rules:
-    - host: k8s.radom-kh.site
+    - host: surveybox.radom-kh.site
       http:
         paths:
           - path: /
