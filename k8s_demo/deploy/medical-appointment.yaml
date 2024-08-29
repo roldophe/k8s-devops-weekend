@@ -84,11 +84,13 @@ spec:
               memory: "256Mi"
       volumes:
         - name: token-keys
-          hostPath:
-            path: /home/radomkhoem/keys
+          nfs:
+            server: 35.240.198.147
+            path: /opt/nfs/data/token-keys
         - name: file-server-path
-          hostPath:
-            path: /opt/app/media/images/
+          nfs:
+            server: 35.240.198.147
+            path: /opt/nfs/data/file-server-path
 
 ---
 apiVersion: v1
