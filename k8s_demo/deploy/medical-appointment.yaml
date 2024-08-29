@@ -16,11 +16,11 @@ metadata:
   name: medical-app-config
   namespace: medical-appointment
 data:
-  APP_BASE_URI: "http://35.240.198.147:30012/"
+  APP_BASE_URI: "https://staging-medical-appointment.radom-kh.site/"
   DB_HOST: "35.240.142.204"
   DB_PORT: "8096"
-  FILE_BASE_URI: "http://35.240.198.147:30012/file/"
-  FILE_DOWNLOAD_URI: "http://35.240.198.147:30012/api/v1/files/download/"
+  FILE_BASE_URI: "https://staging-medical-appointment.radom-kh.site/file/"
+  FILE_DOWNLOAD_URI: "https://staging-medical-appointment.radom-kh.site/api/v1/files/download/"
 
 ---
 apiVersion: apps/v1
@@ -101,11 +101,36 @@ metadata:
   labels:
     app: medical-app
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: medical-app
   ports:
     - protocol: TCP
       port: 8080
       targetPort: 8080
-      nodePort: 30012
+      
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: medical-ingress
+  namespace: medical-appointment
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - staging-medical-appointment.radom-kh.site
+      secretName: medical-tls
+  rules:
+    - host: staging-medical-appointment.radom-kh.site
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: medical-service
+                port:
+                  number: 8080
